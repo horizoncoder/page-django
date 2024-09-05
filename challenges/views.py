@@ -1,3 +1,4 @@
+from calendar import month
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
@@ -17,6 +18,16 @@ monthly_challenges={
     "november": "November challenge!",
     "december": "December challenge!"
 }
+
+def index(request):
+    list_items =""
+    months = list(monthly_challenges.keys())
+
+    for month in months:
+        month_path = reverse("challenge", args=[month])
+        list_items += f"<li> <a href=\" {month_path} \">{month.capitalize()}</a></li>"
+    response_data =f"<ul>{list_items}</ul>"
+    return  HttpResponse(response_data)
 def monthly_challenge_by_number(request, month):
     if month > len(month):
         return HttpResponseNotFound('invalid month')
